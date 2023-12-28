@@ -1,16 +1,33 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  Res,
+  UsePipes,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { ZodValidationPipe } from 'src/zod-validation-pipe.pipe';
-import { TransactionService } from './transaction.service';
-import { transactionCreateSchema } from './validation.schemas';
 import { CreateTransactionDTO } from './dtos';
+import { NewTransactionProducer } from './new.transaction.producer';
+import { transactionCreateSchema } from './validation.schemas';
 
 @Controller('transaction')
 export class TransactionController {
-  constructor(private readonly transactionService: TransactionService) {}
+  constructor(
+    private readonly newTransactionProducer: NewTransactionProducer,
+  ) {}
 
   @Post()
   @UsePipes(new ZodValidationPipe(transactionCreateSchema))
-  async create(@Body() createTransactionDTO: CreateTransactionDTO) {
-    return this.transactionService.create(createTransactionDTO);
+  async enqueueNewTransaction(
+    @Body() createTransactionDTO: CreateTransactionDTO,
+    @Res() res: Response,
+  ) {
+    await this.newTransactionProducer.enqueue(createTransactionDTO);
+
+    res.status(HttpStatus.CREATED).json({
+      message: 'Transaction added to queue',
+    });
   }
 }

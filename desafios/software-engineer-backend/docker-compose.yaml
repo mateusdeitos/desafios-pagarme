@@ -17,12 +17,13 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: nest-docker-postgres
-    environment:
-      - PORT=${PORT}
+    env_file:
+      - .env
     ports:
       - '3000:3000'
     depends_on:
       - db
+      - redis
     volumes:
       - ./src:/app/src
 
@@ -30,10 +31,17 @@ services:
     image: dpage/pgadmin4
     restart: always
     container_name: nest-pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+    env_file:
+      - .env
     ports:
       - '5050:80'
     depends_on:
       - db
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: redis
+    env_file:
+      - .env
+    ports:
+      - '6379:6379'
