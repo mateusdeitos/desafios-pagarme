@@ -9,22 +9,27 @@ import {
 import { Response } from 'express';
 import { ZodValidationPipe } from 'src/zod-validation-pipe.pipe';
 import { CreateTransactionDTO } from './dtos';
-import { NewTransactionProducer } from './new.transaction.producer';
+import { ProcessTransactionProducer } from './new.transaction.producer';
 import { transactionCreateSchema } from './validation.schemas';
+import { TransactionService } from './transaction.service';
 
 @Controller('transaction')
 export class TransactionController {
   constructor(
-    private readonly newTransactionProducer: NewTransactionProducer,
+    private readonly processTransactionProducer: ProcessTransactionProducer,
+    private readonly transactionService: TransactionService,
   ) {}
 
   @Post()
   @UsePipes(new ZodValidationPipe(transactionCreateSchema))
-  async enqueueNewTransaction(
+  async create(
     @Body() createTransactionDTO: CreateTransactionDTO,
     @Res() res: Response,
   ) {
-    await this.newTransactionProducer.enqueue(createTransactionDTO);
+    const transaction = await this.transactionService.create(
+      createTransactionDTO,
+    );
+    await this.processTransactionProducer.enqueue(transaction);
 
     res.status(HttpStatus.CREATED).json({
       message: 'Transaction added to queue',

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
-import { transaction } from 'src/schema';
+import { transaction } from '../../drizzle/schema';
 import { CreateTransactionDTO } from './dtos';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class TransactionService {
 
   async create(payload: CreateTransactionDTO) {
     const db = this.client.getDb();
-    const result = await db
+    const [result] = await db
       .insert(transaction)
       .values({
         amount: payload.amount * 100,

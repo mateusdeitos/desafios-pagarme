@@ -1,16 +1,18 @@
 import { OnQueueActive, OnQueueError, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { TransactionService } from './transaction.service';
-import { CreateTransactionDTO } from './dtos';
+import { PayableService } from 'src/payable/payable.service';
+import { Transaction } from './dtos';
 
-@Processor('new-transaction')
+@Processor('process-transaction')
 export class TransactionProcessor {
-  constructor(private transactionService: TransactionService) {}
+  constructor(private payableService: PayableService) {}
 
-  @Process('create-transaction')
-  async create(job: Job<CreateTransactionDTO>) {
-    await this.transactionService.create(job.data);
-    console.log('Job done');
+  @Process()
+  async process(job: Job<Transaction>) {
+    // process payables here
+    const transaction = job.data;
+    const payable = await this.payableService.create(transaction);
+    console.log(`Payable created: ${JSON.stringify(payable, null, 2)}`);
   }
 
   @OnQueueActive()
