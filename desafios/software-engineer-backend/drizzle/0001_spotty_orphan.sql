@@ -1,0 +1,1 @@
+ALTER TABLE "transaction" ADD COLUMN "failed_at" timestamp;

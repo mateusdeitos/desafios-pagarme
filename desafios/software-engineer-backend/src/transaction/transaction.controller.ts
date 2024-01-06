@@ -9,7 +9,7 @@ import {
 import { Response } from 'express';
 import { ZodValidationPipe } from 'src/zod-validation-pipe.pipe';
 import { CreateTransactionDTO } from './dtos';
-import { ProcessTransactionProducer } from './new.transaction.producer';
+import { ProcessTransactionProducer } from './transaction.producer';
 import { transactionCreateSchema } from './validation.schemas';
 import { TransactionService } from './transaction.service';
 

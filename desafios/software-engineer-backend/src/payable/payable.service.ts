@@ -34,15 +34,23 @@ export class PayableService {
 
     const db = this.client.getDb();
     const [payableData] = await db.transaction(async (tx) => {
-      const payableData = await tx
-        .insert(payable)
-        .values(createPayableDTO)
-        .returning();
+      await tx
+        .select({ id: transaction.id })
+        .from(transaction)
+        .where(eq(transaction.id, _transaction.id))
+        .for('update');
+
+      await tx.insert(payable).values(createPayableDTO).onConflictDoNothing();
 
       await tx
         .update(transaction)
         .set({ processedAt: new Date().toISOString() })
         .where(eq(transaction.id, _transaction.id));
+
+      const payableData = await tx
+        .select()
+        .from(payable)
+        .where(eq(payable.transactionId, _transaction.id));
 
       return payableData;
     });

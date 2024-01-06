@@ -1,0 +1,1 @@
+ALTER TABLE "payable" ADD CONSTRAINT "payable_transaction_id_unique" UNIQUE("transaction_id");

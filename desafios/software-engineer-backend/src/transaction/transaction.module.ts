@@ -4,7 +4,7 @@ import { TransactionService } from './transaction.service';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { BullModule } from '@nestjs/bull';
 import { TransactionProcessor } from './transaction.processor';
-import { ProcessTransactionProducer } from './new.transaction.producer';
+import { ProcessTransactionProducer } from './transaction.producer';
 import { PayableService } from 'src/payable/payable.service';
 import { FeesService } from 'src/payable/fees.service';
 

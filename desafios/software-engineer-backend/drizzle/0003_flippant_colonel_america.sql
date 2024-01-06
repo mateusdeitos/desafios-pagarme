@@ -1,0 +1,1 @@
+ALTER TABLE "transaction" ADD COLUMN "failing_reason" varchar(255);

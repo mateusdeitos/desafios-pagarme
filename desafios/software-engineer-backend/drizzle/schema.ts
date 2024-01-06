@@ -27,7 +27,8 @@ export const payable = pgTable('payable', {
     .references(() => transaction.id, {
       onDelete: 'cascade',
       onUpdate: 'cascade',
-    }),
+    })
+    .unique(),
   createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
 });
 
@@ -42,4 +43,6 @@ export const transaction = pgTable('transaction', {
   cardExpirationDate: varchar('card_expiration_date', { length: 7 }).notNull(),
   createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
   processedAt: timestamp('processed_at', { mode: 'string' }),
+  failedAt: timestamp('failed_at', { mode: 'string' }),
+  failingReason: varchar('failing_reason', { length: 255 }),
 });
