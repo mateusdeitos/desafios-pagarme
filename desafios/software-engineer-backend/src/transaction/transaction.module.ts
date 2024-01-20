@@ -7,6 +7,7 @@ import { TransactionProcessor } from './transaction.processor';
 import { ProcessTransactionProducer } from './transaction.producer';
 import { PayableService } from 'src/payable/payable.service';
 import { FeesService } from 'src/payable/fees.service';
+import { EncryptionService } from 'src/shared/encryption.service';
 
 @Module({
   controllers: [TransactionController],
@@ -17,6 +18,7 @@ import { FeesService } from 'src/payable/fees.service';
     ProcessTransactionProducer,
     PayableService,
     FeesService,
+    EncryptionService,
   ],
   imports: [
     BullModule.registerQueue({

@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DrizzleService } from './drizzle/drizzle.service';
 import { TransactionModule } from './transaction/transaction.module';
 import { BullModule } from '@nestjs/bull';
+import { EncryptionService } from './shared/encryption.service';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { BullModule } from '@nestjs/bull';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, DrizzleService],
-  exports: [DrizzleService],
+  providers: [AppService, DrizzleService, EncryptionService],
+  exports: [DrizzleService, EncryptionService],
 })
 export class AppModule {}
