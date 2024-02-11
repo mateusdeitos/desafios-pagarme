@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq, sum } from 'drizzle-orm';
 import { payable, transaction } from 'drizzle/schema';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { Transaction } from 'src/transaction/dtos';
@@ -56,5 +56,15 @@ export class PayableService {
     });
 
     return payableData;
+  }
+
+  async getBalance() {
+    const db = this.client.getDb();
+    const balance = await db
+      .select({ status: payable.status, amount: sum(payable.amount) })
+      .from(payable)
+      .groupBy(payable.status);
+
+    return balance;
   }
 }

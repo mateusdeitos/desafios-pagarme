@@ -17,8 +17,8 @@ import { EncryptionService } from 'src/shared/encryption.service';
     TransactionProcessor,
     ProcessTransactionProducer,
     PayableService,
-    FeesService,
     EncryptionService,
+    FeesService,
   ],
   imports: [
     BullModule.registerQueue({
