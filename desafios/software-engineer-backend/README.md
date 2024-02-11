@@ -1,7 +1,6 @@
 # TODO
 
 - Criar cron para mudar status do payable para paid após 30 dias
-- Criar listagem de transacoes
 - Criar listagem de payables por status
 
 # Desafio Software Engineer, Back-end - Pagar.me
